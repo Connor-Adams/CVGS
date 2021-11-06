@@ -10,6 +10,7 @@ namespace Team6CVGS.Models
         public Location()
         {
             Employees = new HashSet<Employee>();
+            Inventories = new HashSet<Inventory>();
         }
 
         public string Gln { get; set; }
@@ -32,5 +33,6 @@ namespace Team6CVGS.Models
         public virtual Province ProvinceCodeNavigation { get; set; }
         public virtual Region Region { get; set; }
         public virtual ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<Inventory> Inventories { get; set; }
     }
 }

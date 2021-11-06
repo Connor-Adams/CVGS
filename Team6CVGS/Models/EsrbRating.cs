@@ -10,5 +10,7 @@ namespace Team6CVGS.Models
         public string Code { get; set; }
         public string EnglishRating { get; set; }
         public string FrenchRating { get; set; }
+
+        public virtual ICollection<Game> Games { get; set; }
     }
 }

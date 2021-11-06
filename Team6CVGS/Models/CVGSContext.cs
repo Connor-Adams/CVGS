@@ -31,10 +31,14 @@ namespace Team6CVGS.Models
         public virtual DbSet<EsrbContentDescriptor> EsrbContentDescriptors { get; set; }
         public virtual DbSet<EsrbRating> EsrbRatings { get; set; }
         public virtual DbSet<EventLog> EventLogs { get; set; }
+        public virtual DbSet<Game> Games { get; set; }
         public virtual DbSet<GameCategory> GameCategories { get; set; }
         public virtual DbSet<GameCompany> GameCompanies { get; set; }
+        public virtual DbSet<GameEsrbContentDescriptor> GameEsrbContentDescriptors { get; set; }
         public virtual DbSet<GamePerspective> GamePerspectives { get; set; }
         public virtual DbSet<GameStatus> GameStatuses { get; set; }
+        public virtual DbSet<GameSubCategory> GameSubCategories { get; set; }
+        public virtual DbSet<Inventory> Inventories { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<LocationType> LocationTypes { get; set; }
         public virtual DbSet<MigrationHistory> MigrationHistories { get; set; }
@@ -42,6 +46,7 @@ namespace Team6CVGS.Models
         public virtual DbSet<Platform> Platforms { get; set; }
         public virtual DbSet<Population> Populations { get; set; }
         public virtual DbSet<PopulationClassification> PopulationClassifications { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Sku> Skus { get; set; }
@@ -391,6 +396,87 @@ namespace Team6CVGS.Models
                 entity.Property(e => e.Event).HasMaxLength(6);
             });
 
+            modelBuilder.Entity<Game>(entity =>
+            {
+                entity.HasKey(e => e.Guid)
+                    .HasName("Game_PK");
+
+                entity.ToTable("Game");
+
+                entity.Property(e => e.Guid).ValueGeneratedNever();
+
+                entity.Property(e => e.EnglishDescription).HasMaxLength(4000);
+
+                entity.Property(e => e.EnglishDetail).HasMaxLength(4000);
+
+                entity.Property(e => e.EnglishName)
+                    .IsRequired()
+                    .HasMaxLength(70);
+
+                entity.Property(e => e.EnglishPlayerCount).HasMaxLength(30);
+
+                entity.Property(e => e.EnglishTrailer).HasMaxLength(4000);
+
+                entity.Property(e => e.EsrbRatingCode)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.FrenchDescription).HasMaxLength(4000);
+
+                entity.Property(e => e.FrenchDetail).HasMaxLength(4000);
+
+                entity.Property(e => e.FrenchName)
+                    .IsRequired()
+                    .HasMaxLength(70);
+
+                entity.Property(e => e.FrenchPlayerCount).HasMaxLength(30);
+
+                entity.Property(e => e.FrenchTrailer).HasMaxLength(4000);
+
+                entity.Property(e => e.GamePerspectiveCode)
+                    .HasMaxLength(1)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.GameStatusCode)
+                    .IsRequired()
+                    .HasMaxLength(1)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .HasDefaultValueSql("('Unknown')");
+
+                entity.HasOne(d => d.EsrbRatingCodeNavigation)
+                    .WithMany(p => p.Games)
+                    .HasForeignKey(d => d.EsrbRatingCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Game_EsrbRating_FK");
+
+                entity.HasOne(d => d.GameCategory)
+                    .WithMany(p => p.Games)
+                    .HasForeignKey(d => d.GameCategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Game_GameCategory_FK");
+
+                entity.HasOne(d => d.GamePerspectiveCodeNavigation)
+                    .WithMany(p => p.Games)
+                    .HasForeignKey(d => d.GamePerspectiveCode)
+                    .HasConstraintName("Game_GamePerspective_FK");
+
+                entity.HasOne(d => d.GameStatusCodeNavigation)
+                    .WithMany(p => p.Games)
+                    .HasForeignKey(d => d.GameStatusCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Game_GameStatus_FK");
+
+                entity.HasOne(d => d.GameSubCategory)
+                    .WithMany(p => p.Games)
+                    .HasForeignKey(d => d.GameSubCategoryId)
+                    .HasConstraintName("Game_GameSubCategory_FK");
+            });
+
             modelBuilder.Entity<GameCategory>(entity =>
             {
                 entity.ToTable("GameCategory");
@@ -415,6 +501,31 @@ namespace Team6CVGS.Models
                 entity.Property(e => e.FrenchName)
                     .IsRequired()
                     .HasMaxLength(40);
+            });
+
+            modelBuilder.Entity<GameEsrbContentDescriptor>(entity =>
+            {
+                entity.HasKey(e => new { e.GameGuid, e.EsrbContentDescriptorId })
+                    .HasName("GameEsrbContentDescriptor_PK");
+
+                entity.ToTable("GameEsrbContentDescriptor");
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .HasDefaultValueSql("('Unknown')");
+
+                entity.HasOne(d => d.EsrbContentDescriptor)
+                    .WithMany(p => p.GameEsrbContentDescriptors)
+                    .HasForeignKey(d => d.EsrbContentDescriptorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("GameEsrbContentDescriptor_EsrbContentDescriptor_FK");
+
+                entity.HasOne(d => d.GameGu)
+                    .WithMany(p => p.GameEsrbContentDescriptors)
+                    .HasForeignKey(d => d.GameGuid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("GameEsrbContentDescriptor_Game_FK");
             });
 
             modelBuilder.Entity<GamePerspective>(entity =>
@@ -457,6 +568,48 @@ namespace Team6CVGS.Models
                 entity.Property(e => e.FrenchCategory)
                     .IsRequired()
                     .HasMaxLength(15);
+            });
+
+            modelBuilder.Entity<GameSubCategory>(entity =>
+            {
+                entity.ToTable("GameSubCategory");
+
+                entity.Property(e => e.EnglishCategory)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.FrenchCategory)
+                    .IsRequired()
+                    .HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<Inventory>(entity =>
+            {
+                entity.HasKey(e => new { e.ProductGuid, e.LocationGln })
+                    .HasName("Inventory_PK");
+
+                entity.ToTable("Inventory");
+
+                entity.Property(e => e.LocationGln)
+                    .HasMaxLength(11)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .HasDefaultValueSql("('Unknown')");
+
+                entity.HasOne(d => d.LocationGlnNavigation)
+                    .WithMany(p => p.Inventories)
+                    .HasForeignKey(d => d.LocationGln)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Inventory_Location_FK");
+
+                entity.HasOne(d => d.ProductGu)
+                    .WithMany(p => p.Inventories)
+                    .HasForeignKey(d => d.ProductGuid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Inventory_Product_FK");
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -789,6 +942,108 @@ namespace Team6CVGS.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.HasKey(e => e.Guid)
+                    .HasName("Product_PK")
+                    .IsClustered(false);
+
+                entity.ToTable("Product");
+
+                entity.HasIndex(e => e.Gtin, "Product_Gtin_IX")
+                    .IsClustered();
+
+                entity.HasIndex(e => e.Gtin, "Product_Gtin_Unique")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.NewSku, "Product_NewSku_IX");
+
+                entity.HasIndex(e => e.NewSku, "Product_NewSku_Unique")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.UsedSku, "Product_UsedSku_IX");
+
+                entity.HasIndex(e => e.UsedSku, "Product_UsedSku_Unique")
+                    .IsUnique();
+
+                entity.Property(e => e.Guid).ValueGeneratedNever();
+
+                entity.Property(e => e.AcceptUsed).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.GameCompanyPartNumber).HasMaxLength(20);
+
+                entity.Property(e => e.Gtin)
+                    .IsRequired()
+                    .HasMaxLength(14)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.Msrp).HasColumnType("money");
+
+                entity.Property(e => e.NewSku)
+                    .IsRequired()
+                    .HasMaxLength(9)
+                    .HasDefaultValueSql("('?')")
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.NewStorePrice).HasColumnType("money");
+
+                entity.Property(e => e.NewWebPrice).HasColumnType("money");
+
+                entity.Property(e => e.PlatformCode)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.ReleaseDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UsedCustomerCredit)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UsedSku)
+                    .IsRequired()
+                    .HasMaxLength(9)
+                    .HasDefaultValueSql("('?')")
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.UsedStorePrice)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UsedWebPrice)
+                    .HasColumnType("money")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .HasDefaultValueSql("('Unknown')");
+
+                entity.HasOne(d => d.Developer)
+                    .WithMany(p => p.ProductDevelopers)
+                    .HasForeignKey(d => d.DeveloperId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Product_GameCompany_Developer_FK");
+
+                entity.HasOne(d => d.GameGu)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.GameGuid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Product_Game_FK");
+
+                entity.HasOne(d => d.PlatformCodeNavigation)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.PlatformCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Product_Platform_FK");
+
+                entity.HasOne(d => d.Publisher)
+                    .WithMany(p => p.ProductPublishers)
+                    .HasForeignKey(d => d.PublisherId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Product_GameCompany_Publisher_FK");
             });
 
             modelBuilder.Entity<Province>(entity =>

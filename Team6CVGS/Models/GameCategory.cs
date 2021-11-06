@@ -10,5 +10,7 @@ namespace Team6CVGS.Models
         public int Id { get; set; }
         public string EnglishCategory { get; set; }
         public string FrenchCategory { get; set; }
+
+        public virtual ICollection<Game> Games { get; set; }
     }
 }

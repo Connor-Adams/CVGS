@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Team6CVGS.Models.Game>
+
+@{
+    ViewData["Title"] = "TEST";
+}
+
+@foreach (var item in Model)
+{
+
+    <div id="main" style="text-align: center; display:block">
+        <h1> @Html.DisplayFor(modelitem => item.EnglishName) </h1>
+        <br />
+        <br />
+        <iframe style="text-align: center" width="420" height="315" src="@ViewData["trailer"]"></iframe>
+        <h3> @Html.DisplayFor(modelitem => item.EnglishDescription) </h3>   
+        <br />
+        @Html.DisplayFor(modelitem => item.EnglishDetail)
+
+    </div>
+
+}
+

@@ -5,9 +5,15 @@ using System.Collections.Generic;
 
 namespace Team6CVGS.Models
 {
-    public partial class GameStatus
+    public partial class GameSubCategory
     {
-        public string Code { get; set; }
+        public GameSubCategory()
+        {
+            Games = new HashSet<Game>();
+        }
+
+        public int Id { get; set; }
+        public int GameCategoryId { get; set; }
         public string EnglishCategory { get; set; }
         public string FrenchCategory { get; set; }
 

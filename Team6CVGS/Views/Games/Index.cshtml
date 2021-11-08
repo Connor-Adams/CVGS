@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Team6CVGS.Models.Game>
+
+@{
+    ViewData["Title"] = "Games";
+}
+
+<h1>All Games</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+            <div class="panel-footer">
+                <p class="box-title"><b>Total Games: </b><span class="label label-primary">@Model.Count()</span></p>
+            </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="panel-body">
+        <table class="table table-hover table-bordered table-condensed" id="UsersWithRoles">
+            <thead>
+                <tr>
+                    <th>
+                        Name<!--@Html.DisplayNameFor(model => model.EnglishName)-->
+                    </th>
+                    <th>
+                        ERSB Rating<!--@Html.DisplayNameFor(model => model.EsrbRatingCodeNavigation)-->
+                    </th>
+                    <th>
+                        Category<!--@Html.DisplayNameFor(model => model.GameCategory)-->
+                    </th>
+                    <th>
+                        Sub Category<!--@Html.DisplayNameFor(model => model.GameSubCategory)-->
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr onclick="location.href = '@(Url.Action("Game", "Games", new { guid = item.Guid, trailer = item.EnglishTrailer } ))'">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EnglishName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EsrbRatingCodeNavigation.Code)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GameCategory.EnglishCategory)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GameSubCategory.EnglishCategory)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Guid">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Guid">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Guid">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

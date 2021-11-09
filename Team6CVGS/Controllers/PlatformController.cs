@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Team6CVGS.Models;
 
 namespace Team6CVGS.Controllers
 {
+    [Authorize]
     public class PlatformController : Controller
     {
         private readonly CVGSContext _context;

@@ -11,6 +11,7 @@ namespace Team6CVGS.Models
         {
             GameEsrbContentDescriptors = new HashSet<GameEsrbContentDescriptor>();
             Products = new HashSet<Product>();
+            Reviews = new HashSet<Review>();
         }
 
         public Guid Guid { get; set; }
@@ -39,5 +40,6 @@ namespace Team6CVGS.Models
         public virtual GameSubCategory GameSubCategory { get; set; }
         public virtual ICollection<GameEsrbContentDescriptor> GameEsrbContentDescriptors { get; set; }
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

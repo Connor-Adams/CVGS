@@ -7,6 +7,11 @@ namespace Team6CVGS.Models
 {
     public partial class Person
     {
+        public Person()
+        {
+            Reviews = new HashSet<Review>();
+        }
+
         public int Id { get; set; }
         public string Surname { get; set; }
         public string GivenName { get; set; }
@@ -25,5 +30,6 @@ namespace Team6CVGS.Models
         public virtual Country CountryCodeNavigation { get; set; }
         public virtual Province ProvinceCodeNavigation { get; set; }
         public virtual Employee Employee { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

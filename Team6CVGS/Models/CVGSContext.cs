@@ -18,10 +18,12 @@ namespace Team6CVGS.Models
         }
 
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
+        public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<CreditCard> CreditCards { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
@@ -49,6 +51,7 @@ namespace Team6CVGS.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<Sku> Skus { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<SupplierContact> SupplierContacts { get; set; }
@@ -58,7 +61,7 @@ namespace Team6CVGS.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-7JMFIQA;Database=CVGS;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-7JMFIQA;Initial Catalog=CVGS;Integrated Security=True;MultipleActiveResultSets=True;");
             }
         }
 
@@ -68,87 +71,97 @@ namespace Team6CVGS.Models
 
             modelBuilder.Entity<AspNetRole>(entity =>
             {
-                entity.HasIndex(e => e.Name, "RoleNameIndex")
-                    .IsUnique();
+                entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
+                    .IsUnique()
+                    .HasFilter("([NormalizedName] IS NOT NULL)");
 
-                entity.Property(e => e.Id).HasMaxLength(128);
+                entity.Property(e => e.Name).HasMaxLength(256);
 
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(256);
+                entity.Property(e => e.NormalizedName).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<AspNetRoleClaim>(entity =>
+            {
+                entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
+
+                entity.Property(e => e.RoleId).IsRequired();
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetRoleClaims)
+                    .HasForeignKey(d => d.RoleId);
             });
 
             modelBuilder.Entity<AspNetUser>(entity =>
             {
-                entity.HasIndex(e => e.UserName, "UserNameIndex")
-                    .IsUnique();
+                entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
 
-                entity.Property(e => e.Id).HasMaxLength(128);
+                entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
+                    .IsUnique()
+                    .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
                 entity.Property(e => e.Email).HasMaxLength(256);
 
-                entity.Property(e => e.LockoutEndDateUtc).HasColumnType("datetime");
+                entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
-                entity.Property(e => e.UserName)
-                    .IsRequired()
-                    .HasMaxLength(256);
+                entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+
+                entity.Property(e => e.UserName).HasMaxLength(256);
             });
 
             modelBuilder.Entity<AspNetUserClaim>(entity =>
             {
-                entity.HasIndex(e => e.UserId, "IX_UserId");
+                entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
 
-                entity.Property(e => e.UserId)
-                    .IsRequired()
-                    .HasMaxLength(128);
+                entity.Property(e => e.UserId).IsRequired();
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserClaims)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId");
+                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<AspNetUserLogin>(entity =>
             {
-                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey, e.UserId })
-                    .HasName("PK_dbo.AspNetUserLogins");
+                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
 
-                entity.HasIndex(e => e.UserId, "IX_UserId");
+                entity.HasIndex(e => e.UserId, "IX_AspNetUserLogins_UserId");
 
                 entity.Property(e => e.LoginProvider).HasMaxLength(128);
 
                 entity.Property(e => e.ProviderKey).HasMaxLength(128);
 
-                entity.Property(e => e.UserId).HasMaxLength(128);
+                entity.Property(e => e.UserId).IsRequired();
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserLogins)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId");
+                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<AspNetUserRole>(entity =>
             {
-                entity.HasKey(e => new { e.UserId, e.RoleId })
-                    .HasName("PK_dbo.AspNetUserRoles");
+                entity.HasKey(e => new { e.UserId, e.RoleId });
 
-                entity.HasIndex(e => e.RoleId, "IX_RoleId");
-
-                entity.HasIndex(e => e.UserId, "IX_UserId");
-
-                entity.Property(e => e.UserId).HasMaxLength(128);
-
-                entity.Property(e => e.RoleId).HasMaxLength(128);
+                entity.HasIndex(e => e.RoleId, "IX_AspNetUserRoles_RoleId");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.RoleId)
-                    .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId");
+                    .HasForeignKey(d => d.RoleId);
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId");
+                    .HasForeignKey(d => d.UserId);
+            });
+
+            modelBuilder.Entity<AspNetUserToken>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+
+                entity.Property(e => e.LoginProvider).HasMaxLength(128);
+
+                entity.Property(e => e.Name).HasMaxLength(128);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AspNetUserTokens)
+                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<Country>(entity =>
@@ -1096,6 +1109,44 @@ namespace Team6CVGS.Models
                 entity.Property(e => e.FrenchName)
                     .IsRequired()
                     .HasMaxLength(30);
+            });
+
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.ToTable("Review");
+
+                entity.Property(e => e.ReviewId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("reviewId");
+
+                entity.Property(e => e.Approved).HasColumnName("approved");
+
+                entity.Property(e => e.GameGuid).HasColumnName("gameGuid");
+
+                entity.Property(e => e.ReviewContent)
+                    .IsRequired()
+                    .HasColumnType("text")
+                    .HasColumnName("reviewContent");
+
+                entity.Property(e => e.ReviewDate)
+                    .HasColumnType("date")
+                    .HasColumnName("reviewDate");
+
+                entity.Property(e => e.ReviewRaiting).HasColumnName("reviewRaiting");
+
+                entity.Property(e => e.UserId).HasColumnName("userId");
+
+                entity.HasOne(d => d.GameGu)
+                    .WithMany(p => p.Reviews)
+                    .HasForeignKey(d => d.GameGuid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Review_Game");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Reviews)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Review_Person");
             });
 
             modelBuilder.Entity<Sku>(entity =>

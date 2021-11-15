@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace Team6CVGS.Models
 {
-    public partial class AspNetUserLogin
+    public partial class AspNetUserToken
     {
-        public string LoginProvider { get; set; }
-        public string ProviderKey { get; set; }
-        public string ProviderDisplayName { get; set; }
         public string UserId { get; set; }
+        public string LoginProvider { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
 
         public virtual AspNetUser User { get; set; }
     }

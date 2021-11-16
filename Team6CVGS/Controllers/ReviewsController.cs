@@ -49,7 +49,7 @@ namespace Team6CVGS.Controllers
         public IActionResult Create()
         {
             ViewData["GameGuid"] = new SelectList(_context.Games, "Guid", "EnglishName");
-            ViewData["UserId"] = new SelectList(_context.People, "Id", "City");
+            ViewData["UserId"] = new SelectList(_context.People, "Id", "GivenName");
             return View();
         }
 

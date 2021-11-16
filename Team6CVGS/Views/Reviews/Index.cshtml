@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Reviews</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -34,7 +34,9 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
+    if (item.Approved) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ReviewDate)
@@ -60,6 +62,7 @@
                 <a asp-action="Delete" asp-route-id="@item.ReviewId">Delete</a>
             </td>
         </tr>
+    }
 }
     </tbody>
 </table>

@@ -85,7 +85,7 @@ namespace Team6CVGS.Controllers
                 return NotFound();
             }
             ViewData["GameGuid"] = new SelectList(_context.Games, "Guid", "EnglishName", review.GameGuid);
-            ViewData["UserId"] = new SelectList(_context.People, "Id", "City", review.UserId);
+            ViewData["UserId"] = new SelectList(_context.People, "Id", "GivenName", review.UserId);
             return View(review);
         }
 
@@ -122,7 +122,7 @@ namespace Team6CVGS.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["GameGuid"] = new SelectList(_context.Games, "Guid", "EnglishName", review.GameGuid);
-            ViewData["UserId"] = new SelectList(_context.People, "Id", "City", review.UserId);
+            ViewData["UserId"] = new SelectList(_context.People, "Id", "GivenName", review.UserId);
             return View(review);
         }
 

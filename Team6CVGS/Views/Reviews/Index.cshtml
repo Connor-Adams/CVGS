@@ -36,7 +36,7 @@
     <tbody>
 @foreach (var item in Model)
 {
-    if (item.Approved) {
+    //if (item.Approved) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.ReviewDate)
@@ -54,7 +54,7 @@
                 @Html.DisplayFor(modelItem => item.GameGu.EnglishName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.City)
+                @Html.DisplayFor(modelItem => item.User.GivenName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ReviewId">Edit</a> |
@@ -62,7 +62,7 @@
                 <a asp-action="Delete" asp-route-id="@item.ReviewId">Delete</a>
             </td>
         </tr>
-    }
+   // }
 }
     </tbody>
 </table>

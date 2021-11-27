@@ -6,7 +6,10 @@
 
 <h1>All Games</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+    {
+        <a asp-action="Create">Create New</a>
+    }
 </p>
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -31,7 +34,10 @@
                     <th>
                         Sub Category<!--@Html.DisplayNameFor(model => model.GameSubCategory)-->
                     </th>
+                    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+                    {
                     <th></th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -50,11 +56,14 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.GameSubCategory.EnglishCategory)
                         </td>
+                        @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+                        {
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.Guid">Edit</a> |
                             <a asp-action="Details" asp-route-id="@item.Guid">Details</a> |
                             <a asp-action="Delete" asp-route-id="@item.Guid">Delete</a>
                         </td>
+                        }
                     </tr>
                 }
             </tbody>

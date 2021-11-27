@@ -21,7 +21,7 @@ namespace Team6CVGS.Controllers
         // GET: Games
         public async Task<IActionResult> Index()
         {
-            var cVGSContext = _context.Games.Include(g => g.EsrbRatingCodeNavigation).Include(g => g.GameCategory).Include(g => g.GamePerspectiveCodeNavigation).Include(g => g.GameStatusCodeNavigation).Include(g => g.GameSubCategory);
+            var cVGSContext = _context.Games;//.Include(g => g.EsrbRatingCodeNavigation).Include(g => g.GameCategory).Include(g => g.GamePerspectiveCodeNavigation).Include(g => g.GameStatusCodeNavigation).Include(g => g.GameSubCategory).Include(g => g.Guid);
             return View(await cVGSContext.ToListAsync());
         }
 

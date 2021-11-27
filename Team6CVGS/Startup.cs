@@ -32,6 +32,8 @@ namespace Team6CVGS
             //Add cvgs database dependancy injection
             services.AddDbContext<CVGSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CVGSConnection")));
 
+            services.AddHttpContextAccessor();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));

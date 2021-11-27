@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Team6CVGS.Models;
 
 namespace Team6CVGS.Migrations
 {
     [DbContext(typeof(CVGSContext))]
-    partial class CVGSContextModelSnapshot : ModelSnapshot
+    [Migration("20211127182249_cartItems")]
+    partial class cartItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -585,10 +587,6 @@ namespace Team6CVGS.Migrations
 
                     b.Property<int?>("GameSubCategoryId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("MSRP")
-                        .HasMaxLength(30)
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserName")
                         .IsRequired()

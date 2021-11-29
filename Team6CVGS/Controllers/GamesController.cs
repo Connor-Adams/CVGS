@@ -35,6 +35,10 @@ namespace Team6CVGS.Controllers
             trailer = "https://www.youtube.com/embed/" + videoid;
             ViewData["trailer"] = trailer;
 
+            // Going to attempt to retrieve reviews if their are any
+            var reviews = _context.Reviews.Where(r => r.GameGuid.Equals(guid));
+            ViewBag.Reviews = reviews;
+
             //System.Diagnostics.Debug.WriteLine(videoid);
 
             return View(await cVGSContext.ToListAsync());

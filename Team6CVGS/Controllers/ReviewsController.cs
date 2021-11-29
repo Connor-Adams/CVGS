@@ -161,5 +161,13 @@ namespace Team6CVGS.Controllers
         {
             return _context.Reviews.Any(e => e.ReviewId == id);
         }
+
+        public async Task<IActionResult> UnapprovedReviews()
+        {
+            var cVGSContext = _context.Reviews.Include(r => r.GameGu).Include(r => r.User);
+            return View(await cVGSContext.ToListAsync());
+
+           // return View("UnapprovedReviews");
+        }
     }
 }

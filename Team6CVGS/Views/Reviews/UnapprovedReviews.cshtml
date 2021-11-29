@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Reviews</h1>
+<h1>Unapproved Reviews</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -22,7 +22,10 @@
                 @Html.DisplayNameFor(model => model.ReviewRaiting)
             </th>
             <th>
-                Game Name
+                @Html.DisplayNameFor(model => model.Approved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GameGu)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.User)
@@ -33,7 +36,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            @if (item.Approved)
+            @if (!item.Approved)
             {
                 <tr>
                     <td>
@@ -45,7 +48,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ReviewRaiting)
                     </td>
-
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Approved)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.GameGu.EnglishName)
                     </td>

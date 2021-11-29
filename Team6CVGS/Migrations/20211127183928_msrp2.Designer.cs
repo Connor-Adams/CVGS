@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Team6CVGS.Models;
 
 namespace Team6CVGS.Migrations
 {
     [DbContext(typeof(CVGSContext))]
-    partial class CVGSContextModelSnapshot : ModelSnapshot
+    [Migration("20211127183928_msrp2")]
+    partial class msrp2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

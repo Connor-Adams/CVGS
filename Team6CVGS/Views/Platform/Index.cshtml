@@ -7,7 +7,10 @@
 <h1>Platforms</h1>
 
 <p>
-    <a asp-action="Create">Add Platform</a>
+    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+    {
+        <a asp-action="Create">Add Platform</a>
+    }
 </p>
 <table class="table">
     <thead>
@@ -18,8 +21,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.FrenchName)
             </th>
-            <th></th>
-        </tr>
+            @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+            {
+                <th></th>
+            }
+            </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
@@ -30,12 +36,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FrenchName)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Code">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Code">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Code">Delete</a>
-            </td>
-        </tr>
+            @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+            {
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Code">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Code">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Code">Delete</a>
+                </td>
+            }
+            </tr>
 }
     </tbody>
 </table>

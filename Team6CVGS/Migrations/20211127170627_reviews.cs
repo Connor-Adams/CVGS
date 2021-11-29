@@ -7,8 +7,6 @@ namespace Team6CVGS.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
-
             migrationBuilder.CreateTable(
                 name: "Review",
                 columns: table => new

@@ -39,36 +39,6 @@
     <tbody>
         @foreach (var item in Model)
         {
-            if (User.IsInRole("Employee") || User.IsInRole("Admin"))
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ReviewDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ReviewContent)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ReviewRaiting)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.GameGu.EnglishName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.User.GivenName)
-                    </td>
-                    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
-                    {
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.ReviewId">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.ReviewId">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.ReviewId">Delete</a>
-                        </td>
-                    }
-                </tr>
-            }
-            else
-            {
                 if (item.Approved)
                 {
                 <tr>
@@ -98,6 +68,6 @@
                 </tr>
                 }
             }
-        }
+        
     </tbody>
 </table>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -32,6 +33,8 @@ namespace Team6CVGS.Models
         public string EnglishDetail { get; set; }
         public string FrenchDetail { get; set; }
         public string UserName { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal MSRP { get; set; }
 
         public virtual EsrbRating EsrbRatingCodeNavigation { get; set; }
         public virtual GameCategory GameCategory { get; set; }

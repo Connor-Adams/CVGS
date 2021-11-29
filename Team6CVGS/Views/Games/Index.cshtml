@@ -6,7 +6,10 @@
 
 <h1>All Games</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+    {
+        <a asp-action="Create">Create New</a>
+    }
 </p>
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -31,31 +34,48 @@
                     <th>
                         Sub Category<!--@Html.DisplayNameFor(model => model.GameSubCategory)-->
                     </th>
+                    <!--<th>
+    MSRP<!--@Html.DisplayNameFor(model => model.MSRP)-->
+                    </th>
                     <th></th>
+                    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+                    {
+                        <th></th>
+                    }
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr onclick="location.href = '@(Url.Action("Game", "Games", new { guid = item.Guid, trailer = item.EnglishTrailer } ))'">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EnglishName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EsrbRatingCodeNavigation.Code)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GameCategory.EnglishCategory)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GameSubCategory.EnglishCategory)
-                        </td>
+                <tr onclick="location.href = '@(Url.Action("Game", "Games", new { guid = item.Guid, trailer = item.EnglishTrailer } ))'">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EnglishName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EsrbRatingCodeNavigation.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GameCategory.EnglishCategory)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GameSubCategory.EnglishCategory)
+                    </td>
+                    <!--<td>
+                        @Html.DisplayFor(modelItem => item.MSRP)
+                    </td>-->
+                <td>
+                    <!--<a asp-controller="AddToCart" asp-action="AddToCart" asp-route-id="@item">Add To Cart</a>-->
+                    <a href="@(Url.ActionLink("AddToCart", "ShoppingCart", new { game = item.Guid}))">Add To Cart</a>
+                </td>
+                    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+                    {
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.Guid">Edit</a> |
                             <a asp-action="Details" asp-route-id="@item.Guid">Details</a> |
                             <a asp-action="Delete" asp-route-id="@item.Guid">Delete</a>
                         </td>
-                    </tr>
+                    }
+                </tr>
                 }
             </tbody>
         </table>

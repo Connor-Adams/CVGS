@@ -7,7 +7,10 @@
 <h1>Reviews</h1>
 
 <p>
+    @if (User.IsInRole("Employee") || User.IsInRole("Admin") || User.IsInRole("Member"))
+    {
     <a asp-action="Create">Create New</a>
+    }
 </p>
 <table class="table">
     <thead>
@@ -27,13 +30,16 @@
             <th>
                 @Html.DisplayNameFor(model => model.User)
             </th>
-            <th></th>
-        </tr>
+            @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+            {
+                <th></th>
+            }
+            </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            @if (item.Approved)
+            if (User.IsInRole("Employee") || User.IsInRole("Admin"))
             {
                 <tr>
                     <td>
@@ -45,19 +51,58 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.ReviewRaiting)
                     </td>
-
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Approved)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.GameGu.EnglishName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.User.GivenName)
                     </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ReviewId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.ReviewId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ReviewId">Delete</a>
-                    </td>
+                    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ReviewId">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.ReviewId">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ReviewId">Delete</a>
+                        </td>
+                    }
                 </tr>
+            }
+            else
+            {
+                if (item.Approved)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReviewDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReviewContent)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReviewRaiting)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Approved)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GameGu.EnglishName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.GivenName)
+                    </td>
+                    @if (User.IsInRole("Employee") || User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ReviewId">Review</a> |
+                            <a asp-action="Details" asp-route-id="@item.ReviewId">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ReviewId">Delete</a>
+                        </td>
+                    }
+                </tr>
+                }
             }
         }
     </tbody>

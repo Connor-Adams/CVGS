@@ -30,7 +30,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Reviews" asp-action="Index">Reviews</a>
                         </li>
-<<<<<<< Updated upstream
                         @if (User.IsInRole("Member") || User.IsInRole("Admin") || User.IsInRole("Employee"))
                         {
                             <li class="nav-item">
@@ -43,8 +42,6 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Reviews" asp-action="UnapprovedReviews">Pending Reviews</a>
                             </li>
                         }
-=======
-
                         @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                         {
                             <li class="nav-item">
@@ -56,8 +53,6 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="EventRegister" asp-action="Index">Events</a>
                             </li>
                         }
-
->>>>>>> Stashed changes
                         @if (User.IsInRole("Admin"))
                         {
                             <a class="nav-link text-dark" asp-area="" asp-controller="ApplicationUsers" asp-action="Index">Admin</a>

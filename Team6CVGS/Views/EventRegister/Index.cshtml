@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Team6CVGS.Models.EventLog>
+
+@{
+    ViewData["Title"] = "Event Register";
+}
+
+<h1>Register for an Event</h1><br />
+
+<table  class="table table-hover table-bordered table-condensed" style="table-layout: fixed; width: 100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Event)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Detail)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event)
+            </td>
+            <td style="word-wrap: break-word">
+                @Html.DisplayFor(modelItem => item.Detail)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Guid">Register</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -75,7 +75,7 @@ namespace Team6CVGS
                 endpoints.MapRazorPages();
             });
 
-            RoleSetup(roleManager).Wait();
+           RoleSetup(roleManager).Wait();
         }
 
         // Creates UserRoles if they don't already exist
